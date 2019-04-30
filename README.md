@@ -38,13 +38,7 @@ run()
 ## Test
 
 ```bash
-SESSION=SGEkbko2d... yarn test
-
-# or use env file
-
-cp .env.example .env
-# set your session token
-
+echo SESSION=SGEkbko2d... > .env
 yarn test
 ```
 
