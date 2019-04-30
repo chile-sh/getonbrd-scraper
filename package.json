@@ -1,13 +1,13 @@
 {
-  "name": "getonbrd-scraper",
-  "version": "1.0.0",
+  "name": "@chilesh/getonbrd-scraper",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
   "author": "mallendeo",
   "license": "MIT",
   "scripts": {
     "lint": "standard .",
-    "test": "ava",
+    "test": "npm run lint && ava",
     "pre-push": "npm test"
   },
   "dependencies": {

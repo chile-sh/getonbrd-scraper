@@ -5,15 +5,15 @@ Getonbrd jobs scraping library
 ## Install
 
 ```bash
-yarn add getonbrd-scraper
+yarn add @chilesh/getonbrd-scraper
 
-# or npm i getonbrd-scraper
+# or npm i @chilesh/getonbrd-scraper
 ```
 
 ## Usage
 
 ```js
-import GetOnBrd from 'getonbrd-scraper'
+import GetOnBrd from '@chilesh/getonbrd-scraper'
 
 const run = async () => {
   // GetOnBrd('your_session_cookie')
