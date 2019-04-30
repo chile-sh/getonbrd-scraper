@@ -1,0 +1,24 @@
+{
+  "name": "getonbrd-scraper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
+  "author": "mallendeo",
+  "license": "MIT",
+  "scripts": {
+    "lint": "standard .",
+    "test": "ava"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "got": "^9.6.0",
+    "lodash": "^4.17.11",
+    "qs": "^6.7.0",
+    "sanitize-html": "^1.20.1"
+  },
+  "devDependencies": {
+    "ava": "^1.4.1",
+    "husky": "^2.1.0",
+    "standard": "^12.0.1"
+  }
+}
