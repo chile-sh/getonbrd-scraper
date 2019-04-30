@@ -38,7 +38,7 @@ run()
 ## Test
 
 ```bash
-yarn test
+SESSION=SGEkbko2d... yarn test
 ```
 
 # License
