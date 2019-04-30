@@ -1,6 +1,6 @@
 {
-  "name": "@chilesh/getonbrd-scraper",
-  "version": "1.0.4",
+  "name": "@chile-sh/getonbrd-scraper",
+  "version": "1.1.0",
   "main": "index.js",
   "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
   "author": "mallendeo",
