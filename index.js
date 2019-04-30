@@ -6,7 +6,7 @@ const pullAll = require('lodash/pullAll')
 const sanitizeHtml = require('sanitize-html')
 const got = require('got')
 
-const { isRequired, dom, txt } = require('./helpers.js')
+const { dom, txt } = require('./helpers.js')
 
 const HOST = 'https://www.getonbrd.com'
 const SEARCH_URL = `${HOST}/webpros/search_jobs`

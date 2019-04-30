@@ -1,6 +1,9 @@
 import test from 'ava'
 import GetOnBrd from './'
 
+import dotenv from 'dotenv'
+dotenv.config()
+
 const { SESSION } = process.env
 
 if (!SESSION) throw Error(`'SESSION' env variable is required!`)

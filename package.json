@@ -1,6 +1,6 @@
 {
   "name": "@chilesh/getonbrd-scraper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
   "author": "mallendeo",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^7.0.0",
     "got": "^9.6.0",
     "lodash": "^4.17.11",
     "qs": "^6.7.0",
