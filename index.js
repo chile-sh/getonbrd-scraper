@@ -16,22 +16,24 @@ const DEFAULT_HEADERS = {
   accept: '*/*'
 }
 
-module.exports = async (session = isRequired('session')) => {
+const getContent = (el, excludedTags = ['div']) => {
+  const allowedTags = pullAll(sanitizeHtml.defaults.allowedTags, excludedTags)
+
+  const descHtml = el.html()
+  return sanitizeHtml(descHtml, {
+    allowedTags,
+    allowedIframeHostnames: ['www.youtube.com']
+  })
+}
+
+module.exports = async session => {
   const sessionCookie = `_getonboard_session=${session};`
 
-  const csrfToken = (await dom(HOST, { headers: { cookie: sessionCookie } }))(
-    '[name="csrf-token"]'
-  ).attr('content')
-
-  const getContent = (el, excludedTags = ['div']) => {
-    const allowedTags = pullAll(sanitizeHtml.defaults.allowedTags, excludedTags)
-
-    const descHtml = el.html()
-    return sanitizeHtml(descHtml, {
-      allowedTags,
-      allowedIframeHostnames: ['www.youtube.com']
-    })
-  }
+  const csrfToken = session
+    ? (await dom(HOST, { headers: { cookie: sessionCookie } }))(
+      '[name="csrf-token"]'
+    ).attr('content')
+    : null
 
   const getJobsBySalary = async (minSalary, maxSalary, offset = 0) => {
     if (![minSalary, maxSalary].every(isNumber)) {
@@ -139,7 +141,11 @@ module.exports = async (session = isRequired('session')) => {
 
   return {
     getCompanyProfile,
-    getJobsBySalary,
+    getJobsBySalary: async (...args) => {
+      if (!session) throw Error('You need to set a session to use this method')
+
+      return getJobsBySalary(...args)
+    },
     getJob,
     _csrfToken: csrfToken
   }

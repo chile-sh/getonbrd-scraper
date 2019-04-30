@@ -38,6 +38,14 @@ const run = async () => {
     const props = ['title', 'logo', 'subtitle', 'followers', 'about', 'links']
     t.assert(props.every(p => typeof company[p] !== 'undefined'))
   })
+
+  test('Should fail trying getJobsBySalary without a session ', async t => {
+    const gob = await GetOnBrd()
+    await t.throwsAsync(
+      () => gob.getJobsBySalary(500, 4000, 50),
+      'You need to set a session to use this method'
+    )
+  })
 }
 
 run()
