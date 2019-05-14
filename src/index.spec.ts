@@ -7,6 +7,8 @@ const { SESSION } = process.env
 
 if (!SESSION) throw Error(`'SESSION' env variable is required!`)
 
+jest.setTimeout(15000)
+
 describe('Scraper', () => {
   let gob = null
   let jobs = null
