@@ -1,8 +1,8 @@
-import qs from 'qs'
+import got, { GotOptions } from 'got'
 import isNumber from 'lodash/isNumber'
 import pullAll from 'lodash/pullAll'
+import qs from 'qs'
 import sanitizeHtml from 'sanitize-html'
-import got from 'got'
 
 import { dom, txt } from './helpers'
 
@@ -24,7 +24,7 @@ const getContent = (el: any, excludedTags = ['div']) => {
   })
 }
 
-export default async (session?: string) => {
+export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
   const sessionCookie = `_getonboard_session=${session};`
 
   let csrfToken = ''
@@ -37,6 +37,7 @@ export default async (session?: string) => {
     minSalary: number,
     maxSalary: number,
     offset = 0,
+    gotOpts: GotOptions<any> = defaultOpts,
   ) => {
     if (![minSalary, maxSalary].every(isNumber)) {
       throw Error('minSalary and maxSalary required!')
@@ -58,6 +59,8 @@ export default async (session?: string) => {
       },
     }
 
+    const { headers = {}, ...opts } = gotOpts
+
     const { body } = await got(SEARCH_URL, {
       method: 'post',
       body: qs.stringify(dataObj, { arrayFormat: 'brackets' }),
@@ -67,7 +70,9 @@ export default async (session?: string) => {
         'x-requested-with': 'XMLHttpRequest',
         'content-type': 'application/x-www-form-urlencoded',
         'x-csrf-token': csrfToken,
+        ...headers,
       },
+      ...opts,
     })
 
     const html = body.match(
@@ -80,8 +85,11 @@ export default async (session?: string) => {
     return { urls, next }
   }
 
-  const getJob = async (url: string) => {
-    const $ = await dom(url)
+  const getJob = async (
+    url: string,
+    gotOpts: GotOptions<any> = defaultOpts,
+  ) => {
+    const $ = await dom(url, gotOpts)
 
     const _company = $('[itemprop="hiringOrganization"]')
     const _title = $('.gb-landing-cover__title')
@@ -121,8 +129,11 @@ export default async (session?: string) => {
     }
   }
 
-  const getCompanyProfile = async url => {
-    const $ = await dom(url)
+  const getCompanyProfile = async (
+    url: string,
+    gotOpts: GotOptions<any> = defaultOpts,
+  ) => {
+    const $ = await dom(url, gotOpts)
 
     const _about = $('.gb-landing-section')
     const _logo = $('.gb-header-brand__logo').attr('style')
