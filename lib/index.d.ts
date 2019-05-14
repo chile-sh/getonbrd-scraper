@@ -6,7 +6,10 @@ declare const _default: (session?: string, defaultOpts?: got.GotOptions<any>) =>
         subtitle: string;
         followers: number;
         about: string;
-        links: any[];
+        links: {
+            href: string;
+            text: string;
+        }[];
     }>;
     getJobsBySalary: (args_0: number, args_1: number, args_2?: number) => Promise<{
         urls: string[];
