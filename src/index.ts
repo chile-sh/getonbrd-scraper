@@ -138,18 +138,20 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
     const _about = $('.gb-landing-section')
     const _logo = $('.gb-header-brand__logo').attr('style')
 
+    const links: { href: string; text: string }[] = $('.gb-aside-links__item')
+      .map((i, el) => ({
+        href: $(el).attr('href'),
+        text: txt($(el)),
+      }))
+      .get()
+
     return {
       title: txt($('.gb-landing-cover__title')),
       logo: _logo.length ? _logo.match(/url\((.+)\)/)[1] : null,
       subtitle: getContent($('.gb-landing-cover__subtitle')),
       followers: Number(txt($('.js-followers-count'))),
       about: _about.length ? getContent(_about) : null,
-      links: $('.gb-aside-links__item')
-        .map((i, el) => ({
-          href: $(el).attr('href'),
-          text: txt($(el)),
-        }))
-        .get(),
+      links,
     }
   }
 
