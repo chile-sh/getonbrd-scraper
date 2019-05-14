@@ -8,8 +8,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
-    "build": "tsc",
-    "test": "npm run lint && jest"
+    "build": "rm -rf lib && tsc",
+    "test": "yarn lint && jest"
   },
   "files": [
     "lib"

@@ -38,7 +38,7 @@ run()
 ## Test
 
 ```bash
-echo SESSION=SGEkbko2d... > .env
+echo SESSION=SGEkbko2d... > .env # or export SESSION...
 yarn test
 ```
 
