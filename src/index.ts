@@ -1,44 +1,47 @@
-'use strict'
+import qs from 'qs'
+import isNumber from 'lodash/isNumber'
+import pullAll from 'lodash/pullAll'
+import sanitizeHtml from 'sanitize-html'
+import got from 'got'
 
-const qs = require('qs')
-const isNumber = require('lodash/isNumber')
-const pullAll = require('lodash/pullAll')
-const sanitizeHtml = require('sanitize-html')
-const got = require('got')
-
-const { dom, txt } = require('./helpers.js')
+import { dom, txt } from './helpers'
 
 const HOST = 'https://www.getonbrd.com'
 const SEARCH_URL = `${HOST}/webpros/search_jobs`
 
 const DEFAULT_HEADERS = {
   'accept-language': 'es-US,es;q=0.9,es-419;q=0.8,en;q=0.7',
-  accept: '*/*'
+  accept: '*/*',
 }
 
-const getContent = (el, excludedTags = ['div']) => {
+const getContent = (el: any, excludedTags = ['div']) => {
   const allowedTags = pullAll(sanitizeHtml.defaults.allowedTags, excludedTags)
 
   const descHtml = el.html()
   return sanitizeHtml(descHtml, {
     allowedTags,
-    allowedIframeHostnames: ['www.youtube.com']
+    allowedIframeHostnames: ['www.youtube.com'],
   })
 }
 
-module.exports = async session => {
+export default async (session?: string) => {
   const sessionCookie = `_getonboard_session=${session};`
 
-  const csrfToken = session
-    ? (await dom(HOST, { headers: { cookie: sessionCookie } }))(
-      '[name="csrf-token"]'
-    ).attr('content')
-    : null
+  let csrfToken = ''
+  if (session) {
+    const $ = await dom(HOST, { headers: { cookie: sessionCookie } })
+    csrfToken = $('[name="csrf-token"]').attr('content')
+  }
 
-  const getJobsBySalary = async (minSalary, maxSalary, offset = 0) => {
+  const getJobsBySalary = async (
+    minSalary: number,
+    maxSalary: number,
+    offset = 0,
+  ) => {
     if (![minSalary, maxSalary].every(isNumber)) {
       throw Error('minSalary and maxSalary required!')
     }
+
     const dataObj = {
       utf8: '✓',
       offset,
@@ -51,8 +54,8 @@ module.exports = async session => {
         modality_ids: [''],
         tenant_ids: ['', 1, 5],
         seniority_ids: [''],
-        companies_blacklist_ids: ['']
-      }
+        companies_blacklist_ids: [''],
+      },
     }
 
     const { body } = await got(SEARCH_URL, {
@@ -63,12 +66,12 @@ module.exports = async session => {
         cookie: sessionCookie,
         'x-requested-with': 'XMLHttpRequest',
         'content-type': 'application/x-www-form-urlencoded',
-        'x-csrf-token': csrfToken
-      }
+        'x-csrf-token': csrfToken,
+      },
     })
 
     const html = body.match(
-      /jobs_container\.(?:html|append)\("([\s\S]+?)"\);/
+      /jobs_container\.(?:html|append)\("([\s\S]+?)"\);/,
     )[1]
     const next = body.includes('#load-more-preferred-jobs-link')
     const re = /href=\\"(.+?)\\"/
@@ -77,7 +80,7 @@ module.exports = async session => {
     return { urls, next }
   }
 
-  const getJob = async url => {
+  const getJob = async (url: string) => {
     const $ = await dom(url)
 
     const _company = $('[itemprop="hiringOrganization"]')
@@ -88,9 +91,9 @@ module.exports = async session => {
 
     const salary = _salary.length
       ? txt(_salary.find('strong'))
-        .split(' - ')
-        .map(n => n.match(/\d+/g).join(''))
-        .map(Number)
+          .split(' - ')
+          .map(n => n.match(/\d+/g).join(''))
+          .map(Number)
       : null
 
     return {
@@ -99,11 +102,11 @@ module.exports = async session => {
       company: {
         logo: _company.find('.gb-company-logo__img').attr('src'),
         name: txt(_company.find('h3 [itemprop="name"]')),
-        url: _company.find('h3 a').attr('href')
+        url: _company.find('h3 a').attr('href'),
       },
       category: {
         name: txt(_category),
-        slug: _category.attr('href').match(/.+\/(.+)/)[1]
+        slug: _category.attr('href').match(/.+\/(.+)/)[1],
       },
       tags: $('[itemprop="skills"] a')
         .map((i, el) => $(el).text())
@@ -114,7 +117,7 @@ module.exports = async session => {
       type: txt($('[itemprop="employmentType"]')),
       trending: $('.fa-fire').length > 0,
       country: txt(_loc.find('[itemprop="addressCountry"]')),
-      city: txt(_loc.find('[itemprop="addressLocality"]'))
+      city: txt(_loc.find('[itemprop="addressLocality"]')),
     }
   }
 
@@ -133,20 +136,20 @@ module.exports = async session => {
       links: $('.gb-aside-links__item')
         .map((i, el) => ({
           href: $(el).attr('href'),
-          text: txt($(el))
+          text: txt($(el)),
         }))
-        .get()
+        .get(),
     }
   }
 
   return {
     getCompanyProfile,
-    getJobsBySalary: async (...args) => {
+    getJobsBySalary: async (...args: [number, number, number?]) => {
       if (!session) throw Error('You need to set a session to use this method')
 
       return getJobsBySalary(...args)
     },
     getJob,
-    _csrfToken: csrfToken
+    _csrfToken: csrfToken,
   }
 }

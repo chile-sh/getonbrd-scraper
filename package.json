@@ -1,17 +1,27 @@
 {
   "name": "@chile-sh/getonbrd-scraper",
+  "typings": "lib/index.d.ts",
   "version": "1.1.0",
   "main": "index.js",
   "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
   "author": "mallendeo",
   "license": "MIT",
   "scripts": {
-    "lint": "standard .",
-    "test": "npm run lint && ava"
+    "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
+    "build": "tsc",
+    "test": "npm run lint && jest"
   },
+  "files": [
+    "lib"
+  ],
   "husky": {
     "hooks": {
       "pre-push": "npm test"
+    }
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
     }
   },
   "dependencies": {
@@ -23,8 +33,21 @@
     "sanitize-html": "^1.20.1"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
+    "@types/cheerio": "^0.22.11",
+    "@types/got": "^9.4.4",
+    "@types/jest": "^24.0.13",
+    "@types/lodash": "^4.14.126",
+    "@types/qs": "^6.5.3",
+    "@types/sanitize-html": "^1.18.3",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.7.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "husky": "^2.1.0",
+    "jest": "^24.8.0",
     "prettier": "^1.17.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5"
   }
 }

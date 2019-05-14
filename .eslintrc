@@ -1,3 +1,21 @@
 {
-  "extends": "standard"
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "prettier/@typescript-eslint",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/indent": ["warn", 2],
+    "@typescript-eslint/explicit-member-accessibility": false,
+    "@typescript-eslint/no-non-null-assertion": false,
+    "@typescript-eslint/no-use-before-define": false,
+    "@typescript-eslint/member-delimiter-style": "none",
+    "@typescript-eslint/no-empty-interface": false,
+    "@typescript-eslint/no-parameter-properties": false,
+    "@typescript-eslint/no-namespace": false,
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-explicit-any": false,
+    "@typescript-eslint/camelcase": false
+  }
 }
