@@ -36,8 +36,19 @@ describe('Scraper', () => {
   })
 
   it('Should get job description from an url', async () => {
+    jobs = await gob.getJobsBySalary(500, 4000)
     jobInfo = await gob.getJob(jobs.urls[0])
-    const props = ['date', 'company', 'category', 'title', 'level', 'type']
+
+    const props = [
+      'date',
+      'parsedDate',
+      'company',
+      'category',
+      'title',
+      'level',
+      'type',
+    ]
+
     expect(props.every(p => jobInfo[p])).toBe(true)
   })
 

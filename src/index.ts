@@ -4,7 +4,7 @@ import pullAll from 'lodash/pullAll'
 import qs from 'qs'
 import sanitizeHtml from 'sanitize-html'
 
-import { dom, txt } from './helpers'
+import { dom, txt, parseDate } from './helpers'
 
 const HOST = 'https://www.getonbrd.com'
 const SEARCH_URL = `${HOST}/webpros/search_jobs`
@@ -103,9 +103,11 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
           .map(n => n.match(/\d+/g).join(''))
           .map(Number)
       : null
+    const date = txt(_company.find('time'))
 
     return {
-      date: txt(_company.find('time')),
+      date,
+      parsedDate: parseDate(date),
       salary,
       company: {
         logo: _company.find('.gb-company-logo__img').attr('src'),
