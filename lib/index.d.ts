@@ -1,5 +1,5 @@
 import got from 'got';
-declare const _default: (session?: string, defaultOpts?: got.GotOptions<any>) => Promise<{
+declare const GetOnBrd: (session?: string, defaultOpts?: got.GotOptions<any>) => Promise<{
     getCompanyProfile: (url: string, gotOpts?: got.GotOptions<any>) => Promise<{
         title: string;
         logo: string;
@@ -17,6 +17,7 @@ declare const _default: (session?: string, defaultOpts?: got.GotOptions<any>) =>
     }>;
     getJob: (url: string, gotOpts?: got.GotOptions<any>) => Promise<{
         date: string;
+        parsedDate: Date;
         salary: number[];
         company: {
             logo: string;
@@ -36,6 +37,8 @@ declare const _default: (session?: string, defaultOpts?: got.GotOptions<any>) =>
         country: string;
         city: string;
     }>;
+    getCategories: (gotOpts?: got.GotOptions<any>) => Promise<any[]>;
+    getJobsFromCategory: (categoryUrl: string, gotOpts?: got.GotOptions<any>) => Promise<any[]>;
     _csrfToken: string;
 }>;
-export default _default;
+export default GetOnBrd;

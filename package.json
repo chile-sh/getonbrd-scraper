@@ -2,7 +2,7 @@
   "name": "@chile-sh/getonbrd-scraper",
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
   "author": "mallendeo",
   "license": "MIT",
