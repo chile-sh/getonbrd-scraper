@@ -2,7 +2,7 @@
   "name": "@chile-sh/getonbrd-scraper",
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "repository": "git@github.com:chile-sh/getonbrd-scraper.git",
   "author": "mallendeo",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "build": "rm -rf lib && tsc",
     "test": "yarn lint && jest",
     "release": "np",
-    "publish": "yarn build"
+    "version": "yarn build && git add lib"
   },
   "files": [
     "lib"
