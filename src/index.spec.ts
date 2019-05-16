@@ -1,4 +1,6 @@
 import dotenv from 'dotenv'
+import isUrl from 'is-url-superb'
+
 import GetOnBrd from './index'
 
 dotenv.config()
@@ -58,10 +60,25 @@ describe('Scraper', () => {
     expect(props.every(p => typeof company[p] !== 'undefined')).toBe(true)
   })
 
-  it('Should fail trying getJobsBySalary without a session ', async () => {
+  it('Should fail trying getJobsBySalary without a session', async () => {
     const gob = await GetOnBrd()
     await expect(gob.getJobsBySalary(500, 4000, 50)).rejects.toThrow(
-      'You need to set a session to use this method',
+      'You need to set a session to use this method'
     )
+  })
+
+  it('Should get all categories without a session', async () => {
+    const gob = await GetOnBrd()
+    const urls = await gob.getCategories()
+
+    expect(urls.every(isUrl)).toBe(true)
+  })
+
+  it('Should get all jobs from a category without a session', async () => {
+    const gob = await GetOnBrd()
+    const [category] = await gob.getCategories()
+    const urls = await gob.getJobsFromCategory(category)
+
+    expect(urls.every(isUrl)).toBe(true)
   })
 })

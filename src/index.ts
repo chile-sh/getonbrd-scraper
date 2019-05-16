@@ -7,6 +7,7 @@ import sanitizeHtml from 'sanitize-html'
 import { dom, txt, parseDate } from './helpers'
 
 const HOST = 'https://www.getonbrd.com'
+const HOST_CL = 'https://www.getonbrd.cl'
 const SEARCH_URL = `${HOST}/webpros/search_jobs`
 
 const DEFAULT_HEADERS = {
@@ -21,10 +22,13 @@ const getContent = (el: any, excludedTags = ['div']) => {
   return sanitizeHtml(descHtml, {
     allowedTags,
     allowedIframeHostnames: ['www.youtube.com'],
-  })
+  }).trim()
 }
 
-export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
+const GetOnBrd = async (
+  session?: string,
+  defaultOpts: GotOptions<any> = {}
+) => {
   const sessionCookie = `_getonboard_session=${session};`
 
   let csrfToken = ''
@@ -37,7 +41,7 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
     minSalary: number,
     maxSalary: number,
     offset = 0,
-    gotOpts: GotOptions<any> = defaultOpts,
+    gotOpts: GotOptions<any> = defaultOpts
   ) => {
     if (![minSalary, maxSalary].every(isNumber)) {
       throw Error('minSalary and maxSalary required!')
@@ -76,7 +80,7 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
     })
 
     const html = body.match(
-      /jobs_container\.(?:html|append)\("([\s\S]+?)"\);/,
+      /jobs_container\.(?:html|append)\("([\s\S]+?)"\);/
     )[1]
     const next = body.includes('#load-more-preferred-jobs-link')
     const re = /href=\\"(.+?)\\"/
@@ -87,7 +91,7 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
 
   const getJob = async (
     url: string,
-    gotOpts: GotOptions<any> = defaultOpts,
+    gotOpts: GotOptions<any> = defaultOpts
   ) => {
     const $ = await dom(url, gotOpts)
 
@@ -133,7 +137,7 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
 
   const getCompanyProfile = async (
     url: string,
-    gotOpts: GotOptions<any> = defaultOpts,
+    gotOpts: GotOptions<any> = defaultOpts
   ) => {
     const $ = await dom(url, gotOpts)
 
@@ -157,6 +161,29 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
     }
   }
 
+  const getCategories = async (gotOpts: GotOptions<any> = defaultOpts) => {
+    const $ = await dom(HOST_CL, gotOpts)
+
+    return $('.bg-white a[href^="/emp"]')
+      .map((i, el) => HOST + $(el).attr('href'))
+      .get()
+  }
+
+  const getJobsFromCategory = async (
+    categoryUrl: string,
+    gotOpts: GotOptions<any> = defaultOpts
+  ) => {
+    const $ = await dom(categoryUrl, gotOpts)
+    return $('.job')
+      .map((i, el) =>
+        $(el)
+          .find('a')
+          .first()
+          .attr('href')
+      )
+      .get()
+  }
+
   return {
     getCompanyProfile,
     getJobsBySalary: async (...args: [number, number, number?]) => {
@@ -165,6 +192,10 @@ export default async (session?: string, defaultOpts: GotOptions<any> = {}) => {
       return getJobsBySalary(...args)
     },
     getJob,
+    getCategories,
+    getJobsFromCategory,
     _csrfToken: csrfToken,
   }
 }
+
+export default GetOnBrd
