@@ -9,7 +9,9 @@
   "scripts": {
     "lint": "eslint 'src/**/*.@(ts|js|tsx|jsx)'",
     "build": "rm -rf lib && tsc",
-    "test": "yarn lint && jest"
+    "test": "yarn lint && jest",
+    "release": "np",
+    "publish": "yarn build"
   },
   "files": [
     "lib"
@@ -45,7 +47,9 @@
     "eslint-config-prettier": "^4.2.0",
     "eslint-plugin-prettier": "^3.0.1",
     "husky": "^2.1.0",
+    "is-url-superb": "^3.0.0",
     "jest": "^24.8.0",
+    "np": "^5.0.1",
     "prettier": "^1.17.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
