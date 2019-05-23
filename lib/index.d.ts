@@ -1,4 +1,6 @@
 import got from 'got';
+export declare const HOST = "https://www.getonbrd.com";
+export declare const HOST_CL = "https://www.getonbrd.cl";
 declare const GetOnBrd: (session?: string, defaultOpts?: got.GotOptions<any>) => Promise<{
     getCompanyProfile: (url: string, gotOpts?: got.GotOptions<any>) => Promise<{
         title: string;
@@ -18,24 +20,36 @@ declare const GetOnBrd: (session?: string, defaultOpts?: got.GotOptions<any>) =>
     getJob: (url: string, gotOpts?: got.GotOptions<any>) => Promise<{
         date: string;
         parsedDate: Date;
-        salary: number[];
+        isClosed: boolean;
         company: {
             logo: string;
             name: string;
             url: string;
         };
+        description: string;
+        title: string;
+    } | {
+        salary: number[];
         category: {
             name: string;
             slug: string;
         };
         tags: any[];
-        description: string;
-        title: string;
         level: string;
         type: string;
         trending: boolean;
         country: string;
         city: string;
+        date: string;
+        parsedDate: Date;
+        isClosed: boolean;
+        company: {
+            logo: string;
+            name: string;
+            url: string;
+        };
+        description: string;
+        title: string;
     }>;
     getCategories: (gotOpts?: got.GotOptions<any>) => Promise<any[]>;
     getJobsFromCategory: (categoryUrl: string, gotOpts?: got.GotOptions<any>) => Promise<any[]>;
