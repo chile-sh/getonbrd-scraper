@@ -35,6 +35,7 @@
     "sanitize-html": "^1.20.1"
   },
   "devDependencies": {
+    "@chile-sh/eslint-config-ts": "^2.2.2",
     "@types/cheerio": "^0.22.11",
     "@types/got": "^9.4.4",
     "@types/jest": "^24.0.13",

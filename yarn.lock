@@ -131,6 +131,11 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@chile-sh/eslint-config-ts@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@chile-sh/eslint-config-ts/-/eslint-config-ts-2.2.2.tgz#a6953b7ef6a8761eb49b211b73e736cd47749c3a"
+  integrity sha512-hpd0REsn7LGNQtjTb8TtZV5kEDMoirf0sCWJg6QsKq+kXf+MqhRlb17G6L9P47tyCnqKx86yI/idhbbwdL7jKA==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
