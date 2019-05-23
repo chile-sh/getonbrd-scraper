@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import isUrl from 'is-url-superb'
 
-import GetOnBrd from './index'
+import GetOnBrd, { HOST_CL } from './index'
 
 dotenv.config()
 
@@ -80,5 +80,11 @@ describe('Scraper', () => {
     const urls = await gob.getJobsFromCategory(category)
 
     expect(urls.every(isUrl)).toBe(true)
+  })
+
+  it('Should return a job with isClosed set to true', async () => {
+    const jobUrl = `${HOST_CL}/empleos/diseno-ux/ui-visual-designer-bci-santiago`
+    const job = await gob.getJob(jobUrl)
+    expect(job).toHaveProperty('isClosed', true)
   })
 })
