@@ -6,8 +6,8 @@ import sanitizeHtml from 'sanitize-html'
 
 import { dom, txt, parseDate } from './helpers'
 
-const HOST = 'https://www.getonbrd.com'
-const HOST_CL = 'https://www.getonbrd.cl'
+export const HOST = 'https://www.getonbrd.com'
+export const HOST_CL = 'https://www.getonbrd.cl'
 const SEARCH_URL = `${HOST}/webpros/search_jobs`
 
 const DEFAULT_HEADERS = {
@@ -51,15 +51,15 @@ const GetOnBrd = async (
       utf8: '✓',
       offset,
       webpro: {
-        min_salary: minSalary,
-        max_salary: maxSalary,
-        remote_jobs: 0,
-        category_ids: [''],
-        tag_ids: [''],
-        modality_ids: [''],
-        tenant_ids: ['', 1, 5],
-        seniority_ids: [''],
-        companies_blacklist_ids: [''],
+        ['min_salary']: minSalary,
+        ['max_salary']: maxSalary,
+        ['remote_jobs']: 0,
+        ['category_ids']: [''],
+        ['tag_ids']: [''],
+        ['modality_ids']: [''],
+        ['tenant_ids']: ['', 1, 5],
+        ['seniority_ids']: [''],
+        ['companies_blacklist_ids']: [''],
       },
     }
 
@@ -107,17 +107,27 @@ const GetOnBrd = async (
           .map(n => n.match(/\d+/g).join(''))
           .map(Number)
       : null
-    const date = txt(_company.find('time'))
 
-    return {
+    const date = txt(_company.find('time'))
+    const isClosed = txt($('h3.size2')).startsWith('Empleo finalizado')
+    const common = {
       date,
       parsedDate: parseDate(date),
-      salary,
+      isClosed,
       company: {
         logo: _company.find('.gb-company-logo__img').attr('src'),
         name: txt(_company.find('h3 [itemprop="name"]')),
         url: _company.find('h3 a').attr('href'),
       },
+      description: getContent($('[itemprop="description"]')).trim(),
+      title: txt(_title.find('[itemprop="title"]')),
+    }
+
+    if (isClosed) return common
+
+    return {
+      ...common,
+      salary,
       category: {
         name: txt(_category),
         slug: _category.attr('href').match(/.+\/(.+)/)[1],
@@ -125,8 +135,6 @@ const GetOnBrd = async (
       tags: $('[itemprop="skills"] a')
         .map((i, el) => $(el).text())
         .get(),
-      description: getContent($('[itemprop="description"]')).trim(),
-      title: txt(_title.find('[itemprop="title"]')),
       level: txt($('[itemprop="qualifications"]')),
       type: txt($('[itemprop="employmentType"]')),
       trending: $('.fa-fire').length > 0,
